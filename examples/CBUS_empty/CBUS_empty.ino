@@ -125,7 +125,7 @@ void setup() {
   CBUS.indicateMode(config.FLiM);
 
   // start CAN bus and CBUS message processing
-  // CBUS.setControllerInstance(0);
+  CBUS.setControllerInstance(0);
   CBUS.begin();
 
   // end of setup
