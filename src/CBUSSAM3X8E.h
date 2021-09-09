@@ -48,6 +48,10 @@
 
 #include <due_can.h>            // Due CAN library header file
 
+// Defined to deal with the wrong interpretation of the due_can returns.
+// It returns 1 when things are OK. JPF
+#define CAN_MAILBOX_TRANSFER_OK       1     
+
 //
 /// an implementation of the abstract base CBUS class
 /// to support the SAM3X8E CAN controller peripheral
