@@ -41,6 +41,8 @@
 
 #include <SPI.h>
 
+//#define CBUS_LONG_MESSAGE_MULTIPLE_LISTEN
+
 #include <CBUS.h>               // abstract base class
 #include <CBUSconfig.h>         // CBUS config class
 #include <CBUSLED.h>            // CBUS LED class
@@ -48,8 +50,8 @@
 
 #include <due_can.h>            // Due CAN library header file
 
-// Defined to deal with the wrong interpretation of the due_can returns.
-// It returns 1 when things are OK. JPF
+// I have defined this extra one to deal with the
+// wrong interpretation of the due_can returns. JPF
 #define CAN_MAILBOX_TRANSFER_OK       1     
 
 //
@@ -62,6 +64,7 @@ class CBUSSAM3X8E : public CBUSbase {
 public:
 
   CBUSSAM3X8E();
+  CBUSSAM3X8E(CBUSConfig &);
 
   // these methods are declared virtual in the base class and must be implemented by the derived class
   bool begin(bool poll = false, SPIClass spi = SPI);
