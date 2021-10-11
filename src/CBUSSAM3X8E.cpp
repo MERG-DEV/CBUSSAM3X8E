@@ -56,6 +56,16 @@ CBUSSAM3X8E::CBUSSAM3X8E() {
   _can = &Can0;
 }
 
+CBUSSAM3X8E::CBUSSAM3X8E(CBUSConfig & config)
+    : CBUSbase(config)
+{
+  eventhandler = NULL;
+  framehandler = NULL;
+  _instance = 0;
+  _can = &Can0;
+}
+
+
 //
 /// set the CAN controller peripheral instance, there are two, default is zero
 //
@@ -70,7 +80,7 @@ void CBUSSAM3X8E::setControllerInstance(byte instance) {
 //
 /// initialise the CAN controller and buffers, and attach the ISR
 //
-// The default argument is wrong here.
+
 bool CBUSSAM3X8E::begin(bool poll, SPIClass spi) {
 
   uint32_t init_ret;
