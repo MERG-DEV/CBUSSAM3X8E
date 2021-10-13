@@ -56,15 +56,12 @@ CBUSSAM3X8E::CBUSSAM3X8E() {
   _can = &Can0;
 }
 
-CBUSSAM3X8E::CBUSSAM3X8E(CBUSConfig & config)
-    : CBUSbase(config)
-{
+CBUSSAM3X8E::CBUSSAM3X8E(CBUSConfig *the_config) : CBUSbase(the_config) {
   eventhandler = NULL;
   framehandler = NULL;
   _instance = 0;
   _can = &Can0;
 }
-
 
 //
 /// set the CAN controller peripheral instance, there are two, default is zero
@@ -72,7 +69,7 @@ CBUSSAM3X8E::CBUSSAM3X8E(CBUSConfig & config)
 
 void CBUSSAM3X8E::setControllerInstance(byte instance) {
 
-  Serial << "> setting CAN controller instance to " << instance << endl;
+  // Serial << "> setting CAN controller instance to " << instance << endl;
   _instance = instance;
   _can = (_instance == 0) ? &Can0 : &Can1;
 }
@@ -144,7 +141,7 @@ CANFrame CBUSSAM3X8E::getNextMessage(void) {
 
   memcpy(_msg.data, cf.data.byte, cf.length);
 
-  format_message(&_msg);
+  // format_message(&_msg);
   return _msg;
 }
 
@@ -158,7 +155,7 @@ bool CBUSSAM3X8E::sendMessage(CANFrame *msg, bool rtr, bool ext, byte priority) 
   CAN_FRAME cf;                         // library-specific CAN message structure
 
   makeHeader(msg, priority);            // set the CBUS header - CANID and priority bits
-  format_message(msg);
+  // format_message(msg);
 
   cf.id = msg->id;
   cf.length = msg->len;

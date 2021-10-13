@@ -52,8 +52,8 @@
 #include "defs.h"
 
 // CBUS objects
-CBUSSAM3X8E CBUS;                   // CBUS object
-CBUSConfig config;                  // configuration object
+CBUSConfig myconfig;                // configuration object
+CBUSSAM3X8E CBUS(&myconfig);        // CBUS object
 CBUSLED ledGrn, ledYlw;             // two LED objects
 CBUSSwitch pb_switch;               // switch object
 
@@ -73,21 +73,21 @@ void setup() {
   Serial.begin (115200);
   Serial << "> ** CBUS empty test module v1 **" << endl;
 
-  // set config layout parameters
-  config.EE_NVS_START = 10;
-  config.EE_NUM_NVS = 10;
-  config.EE_EVENTS_START = 50;
-  config.EE_MAX_EVENTS = 64;
-  config.EE_NUM_EVS = 1;
-  config.EE_BYTES_PER_EVENT = (config.EE_NUM_EVS + 4);
+  // set myconfig layout parameters
+  myconfig.EE_NVS_START = 10;
+  myconfig.EE_NUM_NVS = 10;
+  myconfig.EE_EVENTS_START = 50;
+  myconfig.EE_MAX_EVENTS = 64;
+  myconfig.EE_NUM_EVS = 1;
+  myconfig.EE_BYTES_PER_EVENT = (myconfig.EE_NUM_EVS + 4);
 
-  // initialise and load configuration
-  config.setEEPROMtype(EEPROM_INTERNAL);
-  config.begin();
+  // initialise and load myconfiguration
+  myconfig.setEEPROMtype(EEPROM_INTERNAL);
+  myconfig.begin();
 
-  Serial << "> mode = " << (config.FLiM ? "FLiM" : "SLiM") << "> NN = " << config.nodeNum << endl;
+  Serial << "> mode = " << (myconfig.FLiM ? "FLiM" : "SLiM") << "> NN = " << myconfig.nodeNum << endl;
 
-  CBUSParams params(config);
+  CBUSParams params(myconfig);
   params.setVersion(VER_MAJ, VER_MIN, VER_BETA);
   params.setModuleId(MODULE_ID);
   params.setFlags(PF_FLiM | PF_COMBI);
@@ -106,9 +106,9 @@ void setup() {
   // module reset - if switch is depressed at startup and module is in SLiM mode
   pb_switch.run();
 
-  if (pb_switch.isPressed() && !config.FLiM) {
+  if (pb_switch.isPressed() && !myconfig.FLiM) {
     Serial << "> switch was pressed at startup in SLiM mode" << endl;
-    config.resetModule(ledGrn, ledYlw, pb_switch);
+    myconfig.resetModule(ledGrn, ledYlw, pb_switch);
   }
 
   // register our CBUS event handler, to receive event messages of learned accessory events
@@ -122,7 +122,7 @@ void setup() {
   CBUS.setSwitch(pb_switch);
 
   // set CBUS LEDs to indicate the current mode
-  CBUS.indicateMode(config.FLiM);
+  CBUS.indicateMode(myconfig.FLiM);
 
   // start CAN bus and CBUS message processing
   CBUS.setControllerInstance(0);
