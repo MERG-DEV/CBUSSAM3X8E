@@ -99,7 +99,7 @@ bool CBUSSAM3X8E::begin(bool poll, SPIClass spi) {
   // set filter to permissive
   init_watch = _can->watchFor();
 
-  if (!init_watch) {
+  if (init_watch == -1) {
     Serial << "> CAN error from watchFor(), ret = " << init_watch << endl;
     return false;
   }
