@@ -78,7 +78,10 @@ void CBUSSAM3X8E::setControllerInstance(byte instance) {
 /// initialise the CAN controller and buffers, and attach the ISR
 //
 
-bool CBUSSAM3X8E::begin(bool poll, SPIClass spi) {
+bool CBUSSAM3X8E::begin(bool poll, SPIClass& spi) {
+
+  (void)poll;
+  (void)spi;
 
   uint32_t init_ret;
   int init_watch;
