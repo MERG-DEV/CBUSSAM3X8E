@@ -154,26 +154,35 @@ CANFrame CBUSSAM3X8E::getNextMessage(void) {
 
 bool CBUSSAM3X8E::sendMessage(CANFrame *msg, bool rtr, bool ext, byte priority) {
 
-  bool ret;
-  CAN_FRAME cf;                         // library-specific CAN message structure
+  bool ok;
 
+  msg->rtr = rtr;
+  msg->ext = ext;
   makeHeader(msg, priority);            // set the CBUS header - CANID and priority bits
-  // format_message(msg);
+  ok = sendMessageNoUpdate(msg);
+
+  // call user transmit handler
+  if (transmithandler != nullptr) {
+    (void)(*transmithandler)(msg);
+  }
+
+  return ok;
+}
+
+//
+///
+//
+
+bool CBUSSAM3X8E::sendMessageNoUpdate(CANFrame *msg) {
+
+  CAN_FRAME cf;                         // library-specific CAN message structure
 
   cf.id = msg->id;
   cf.length = msg->len;
   cf.rtr = rtr;
   cf.extended = ext;
-
   memcpy(cf.data.bytes, msg->data, msg->len);
-
-  ret = _can->sendFrame(cf);
-
-  if (!ret) {
-    // Serial << "> error sending CAN message, instance = " << _instance << ", ret = " << ret << endl;
-  }
-
-  return ret;
+  return (_can->sendFrame(cf));
 }
 
 //
